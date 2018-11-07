@@ -14,6 +14,10 @@ class Marker extends Sprite {
         this.x = this.startX = 150;
         this.y = this.startY = 275;
     }
+    playInSquare(row, col){
+        this.x = row.x;
+        this.y = col.y;
+    }
 }
 
 class PrincessMarker extends Marker {
@@ -29,9 +33,11 @@ class PrincessMarker extends Marker {
         this.dragging = false;
         let row = Math.floor((this.x - this.board.x) / this.board.SquareSize);
         let col = Math.floor((this.y - this.board.y) / this.board.SquareSize);
-        if ( this.row, this.col >= theBoard.size) {
+        if ( PrincessMarker >= this.board.size) {
             this.x = this.startX;
             this.y = this.startY;
+        this.playInSquare(row, col);
+        this.takeTurns();
         }
     }
     handleGameLoop() {
