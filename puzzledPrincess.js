@@ -103,7 +103,15 @@ class TicTacToe extends Sprite {
         }
     }
     gameIsDrawn() {
-        
+        //3 in row horizontal 
+        for (let row = 0; row < 3; row++) {
+            for (let col = 0; col < 3; col++) {
+                if (this.dataModel[row][col] === this.emptySquareSymbol) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
     gameIsWon() {
         if (this.dataModel[0][0] === this.dataModel[1][1] &&
@@ -136,8 +144,24 @@ class TicTacToe extends Sprite {
             }
 
         }
+        return false;
     }
     takeTurns() {
+        if (this.gameIsWon()) {
+            let message = '        Game Over.\n        ';
+            if (this.activeMarker instanceof PrincessMarker) {
+                message = message + 'The Princess wins.';
+            }
+            else if (this.activeMarker instanceof StrangerMarker) {
+                message = message + 'The Stranger wins.';
+            }
+            game.end(message);
+            return;
+        }
+        if (this.gameIsDrawn()) {
+            game.end('        Game Over.\n        The game ends in a draw.');
+            return;
+        }
         if (!this.activeMarker) {
             if (Math.random() < .5) {
                 this.activeMarker = new PrincessMarker(this);
@@ -154,24 +178,10 @@ class TicTacToe extends Sprite {
             // stranger has moved; now it's princess's turn
             this.activeMarker = new PrincessMarker(this);
         }
-        if (this.gameIsWon()) {
-            let message = '        Game Over.\n        ';
-            if (this.activeMarker instanceof PrincessMarker) {
-                message = message + 'The Princess wins.';
-            }
-            else if (this.activeMarker instanceof StrangerMarker) {
-                message = message + 'The Stranger wins.';
-            }
-            game.end(message);
-            return;
-        }
-        if (this.gameIsDrawn()) {
-            game.end('        Game Over.\n        The game ends in a draw.');
-            return;
-        }
     }
     debugBoard() {
         let boardString = '\n';
+        let moveCount = 0;
         for (let row = 0; row < this.size; row = row + 1) {
             for (let col = 0; col < this.size; col = col + 1) {
                 boardString = boardString + this.dataModel[row][col] + ' ';
@@ -185,7 +195,7 @@ class TicTacToe extends Sprite {
         console.log('The data model after ' + moveCount + ' move(s):' + boardString);
     }
 }
-let moveCount = 0;
+
 
 let theBoard = new TicTacToe();
 theBoard.takeTurns();
