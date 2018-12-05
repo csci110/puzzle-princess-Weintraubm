@@ -105,10 +105,85 @@ class StrangerMarker extends Marker {
         this.board.takeTurns();
     }
     findWinningMove(forOpponent) { return false; }
-    findAnySideMove() { return false; }
-    findAnyCornerMove() { return false; }
-    findOppositeCornerMove() { return false; }
-    findCenterMove() { return false; }
+    findAnySideMove() {
+        let last = this.board.size - 1;
+        // Check all interior columns of first row.
+        for (let col = 1; col < last; col = col + 1) {
+            if (this.board.markSquare(0, col)) {
+                this.playInSquare(0, col);
+                return true;
+            }
+        }
+        // Check all interior columns of third row.
+        for (let col = 1; col < last; col = col + 1) {
+            if (this.board.markSquare(2, col)) {
+                this.playInSquare(2, col);
+                return true;
+            }
+        }
+    }
+    findAnyCornerMove() {
+        // Check upper right
+        if (this.board.markSquare(0, 2)) {
+            this.playInSquare(0, 2);
+            return true;
+        }
+        //upper left
+        if (this.board.markSquare(0, 0)) {
+            this.playInSquare(0, 0);
+            return true;
+        }
+        //lower left
+        if (this.board.markSquare(2, 0)) {
+            this.playInSquare(2, 0);
+            return true;
+        }
+        //lower right
+        if (this.board.markSquare(2, 2)) {
+            this.playInSquare(2, 2);
+            return true;
+        }
+        // if (this.board.markSquare(0, 0 || 0, 2 || 2, 0 || 2, 2)) {
+        //     this.playInSquare(0, 0 || 0, 2 || 2, 0 || 2, 2);
+        //     return true;
+        // }
+        return false;
+    }
+    findOppositeCornerMove() { // Check upper right
+        if (this.board.getSquareSymbol(0, 2) != this.emptySquareSymbol &&
+            this.board.getSqaureSymbol(0, 2) != this.squareSymbol && this.board.markSquare(2, 0)) {
+            this.playInSquare(2, 0);
+            return true;
+        }
+        //upper left
+        if (this.board.getSquareSymbol(0, 0) != this.emptySquareSymbol &&
+            this.board.getSqaureSymbol(0, 0) != this.squareSymbol && this.board.markSquare(2, 2)) {
+            this.playInSquare(2, 2);
+            return true;
+        }
+        //lower left
+        if (this.board.getSquareSymbol(2, 0) != this.emptySquareSymbol &&
+            this.board.getSqaureSymbol(2, 0) != this.squareSymbol && this.board.markSquare(0, 2)) {
+            this.playInSquare(0, 2);
+            return true;
+        }
+        //lower right
+        if (this.board.getSquareSymbol(2, 2) != this.emptySquareSymbol &&
+            this.board.getSqaureSymbol(2, 2) != this.squareSymbol && this.board.markSquare(0, 0)) {
+            this.playInSquare(0, 0);
+            return true;
+        }
+        return false;
+    }
+    findCenterMove() {
+        let center = Math.floor(this.board.size / 2);
+        console.log(center);
+        if (this.board.markSquare(center, center)) {
+            this.playInSquare(center, center);
+            return true;
+        }
+        return false;
+    }
     findForkingMove(forOpponent) { return false; }
 }
 
@@ -193,12 +268,12 @@ class TicTacToe extends Sprite {
             return;
         }
         if (!this.activeMarker) {
-            if (Math.random() < .5) {
+            if (Math.random() <= .5) {
                 this.activeMarker = new PrincessMarker(this);
             }
-            if (Math.random() > .5) {
-                this.activeMarker = new StrangerMarker(this);
-            }
+            //if (Math.random() > .5) {
+            else this.activeMarker = new StrangerMarker(this);
+
         }
         else if (this.activeMarker instanceof PrincessMarker) {
             // princess has moved; now it's stranger's turn
