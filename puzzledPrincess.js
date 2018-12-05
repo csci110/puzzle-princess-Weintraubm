@@ -26,7 +26,7 @@ class PrincessMarker extends Marker {
     constructor(board) {
         super(board, 'annFace.png', 'Princess');
         this.dragging = false;
-
+        this.board.squareSymbolForHumanPlayer = this.squareSymbol;
     }
     handleMouseLeftButtonDown() {
         if (this.inBoard) {
@@ -104,7 +104,19 @@ class StrangerMarker extends Marker {
         if (!foundMove) throw new Error('Failed to find a move.');
         this.board.takeTurns();
     }
-    findWinningMove(forOpponent) { return false; }
+    findWinningMove(forOpponent) {
+        let row, col;
+        for (row = 0; row < 3; row++) {
+            this.board.getSquareSymbol;
+            for (col = 0; col < 3; col++) {
+                this.board.getSquareSymbol(row, col);
+                if (this.board.markSquare(row, col, forOpponent)) { // play tentative move
+                    // this is where you will put your code to see if the tentative move wins the game etc.
+                }
+            }
+        }
+        return false;
+    }
     findAnySideMove() {
         let last = this.board.size - 1;
         // Check all interior columns of first row.
@@ -151,25 +163,25 @@ class StrangerMarker extends Marker {
     }
     findOppositeCornerMove() { // Check upper right
         if (this.board.getSquareSymbol(0, 2) != this.emptySquareSymbol &&
-            this.board.getSqaureSymbol(0, 2) != this.squareSymbol && this.board.markSquare(2, 0)) {
+            this.board.getSquareSymbol(0, 2) != this.squareSymbol && this.board.markSquare(2, 0)) {
             this.playInSquare(2, 0);
             return true;
         }
         //upper left
         if (this.board.getSquareSymbol(0, 0) != this.emptySquareSymbol &&
-            this.board.getSqaureSymbol(0, 0) != this.squareSymbol && this.board.markSquare(2, 2)) {
+            this.board.getSquareSymbol(0, 0) != this.squareSymbol && this.board.markSquare(2, 2)) {
             this.playInSquare(2, 2);
             return true;
         }
         //lower left
         if (this.board.getSquareSymbol(2, 0) != this.emptySquareSymbol &&
-            this.board.getSqaureSymbol(2, 0) != this.squareSymbol && this.board.markSquare(0, 2)) {
+            this.board.getSquareSymbol(2, 0) != this.squareSymbol && this.board.markSquare(0, 2)) {
             this.playInSquare(0, 2);
             return true;
         }
         //lower right
         if (this.board.getSquareSymbol(2, 2) != this.emptySquareSymbol &&
-            this.board.getSqaureSymbol(2, 2) != this.squareSymbol && this.board.markSquare(0, 0)) {
+            this.board.getSquareSymbol(2, 2) != this.squareSymbol && this.board.markSquare(0, 0)) {
             this.playInSquare(0, 0);
             return true;
         }
@@ -307,6 +319,9 @@ class TicTacToe extends Sprite {
         if (this.getSquareSymbol(row, col) === this.emptySquareSymbol) {
             this.dataModel[row][col] = squareSymbol;
             return true;
+        }
+        if (forOpponent) {
+            this.squareSymbol == this.squareSymbolForHumanPlayer;
         }
         return false;
     }
